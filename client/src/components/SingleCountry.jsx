@@ -122,7 +122,7 @@ const SingleCountry = () => {
 
   if (error || !country) {
     return (
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-xl mx-auto mt-20">
         <div className="text-center py-16">
           <h2 className="text-2xl font-semibold text-red-600">
             Country not found
@@ -178,7 +178,7 @@ const SingleCountry = () => {
   }
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4 md:p-8 text-gray-700 mt-28">
+    <div className="max-w-screen-xl mx-auto p-4 md:p-8 text-gray-700 mt-20">
       {/* Main Country Info */}
       <div className="flex flex-wrap gap-8 items-center mb-12 border-b pb-8">
         <div className="flex gap-4 items-center">
