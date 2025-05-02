@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAllCountries } from "../services/countryService";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [countries, setCountries] = useState([]);
@@ -158,12 +159,11 @@ export default function Home() {
           curious explorer, our intuitive and responsive interface makes
           learning about countries fun and engaging.
         </p>
-        <a
-          href="/countries"
-          className="inline-block bg-indigo-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-700 transition"
-        >
-          Start Exploring
-        </a>
+        <Link to={"/countries"}>
+          <button className="inline-block bg-indigo-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-indigo-700 transition">
+            Start Exploring
+          </button>
+        </Link>
       </section>
     </div>
   );
