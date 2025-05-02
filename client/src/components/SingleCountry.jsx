@@ -178,7 +178,7 @@ const SingleCountry = () => {
   }
 
   return (
-    <div className="max-w-screen-xl mx-auto p-4 md:p-8 text-gray-700 mt-20">
+    <div className="max-w-screen-xl mx-auto p-4 md:p-8 text-gray-700 mt-28">
       {/* Main Country Info */}
       <div className="flex flex-wrap gap-8 items-center mb-12 border-b pb-8">
         <div className="flex gap-4 items-center">
