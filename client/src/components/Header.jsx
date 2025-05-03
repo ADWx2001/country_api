@@ -69,15 +69,15 @@ export default function Header() {
           {currentUser ? (
             <h1 className="text-white text-sm md:text-base">
               Hello,{" "}
-              <span className="text-purple-200">{currentUser.firstName}</span>
+              <span className="text-purple-200">{currentUser?.firstName}</span>
             </h1>
           ) : (
             <div className="flex flex-col">
               <h1 className="text-white text-sm md:text-base font-semibold">
-                Finova
+                Chathu
               </h1>
               <span className="text-[9px] md:text-[10px] text-white">
-                creating wealth
+                Explore Countries
               </span>
             </div>
           )}
