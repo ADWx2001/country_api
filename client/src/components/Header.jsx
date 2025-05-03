@@ -65,7 +65,13 @@ export default function Header() {
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Logo and Branding */}
         <div className="flex items-center gap-3 flex-shrink-0">
-          <img src={logo} className="w-12 md:w-16" alt="Finova Logo" />
+          <img
+            src={
+              "https://cliply.co/wp-content/uploads/2021/02/392102850_EARTH_EMOJI_400px.gif"
+            }
+            className="w-12 md:w-16"
+            alt="Finova Logo"
+          />
           {currentUser ? (
             <h1 className="text-white text-sm md:text-base">
               Hello,{" "}
