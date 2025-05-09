@@ -9,6 +9,7 @@ import Header from "./components/Header.jsx";
 import Profile from "./pages/profile.jsx";
 import PrivateRoute from "./routes/privateRoute.jsx";
 import SingleCountry from "./components/SingleCountry.jsx";
+import Footer from "./components/Footer.jsx";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
           </Route>
         </Routes>
+        <Footer />
       </BrowserRouter>
     </>
   );

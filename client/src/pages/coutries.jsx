@@ -26,6 +26,34 @@ function Countries() {
   });
   const itemsPerPage = 12;
 
+  const regions = [
+    {
+      name: "Asia",
+      image:
+        "https://images.unsplash.com/photo-1513415756790-2ac1db1297d0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFzaWF8ZW58MHx8MHx8fDA%3D",
+    },
+    {
+      name: "Europe",
+      image:
+        "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGV1cm9wZXxlbnwwfHwwfHx8MA%3D%3D",
+    },
+    {
+      name: "Africa",
+      image:
+        "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      name: "Americas",
+      image:
+        "https://plus.unsplash.com/premium_photo-1733266821825-b5a3724e081d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8YW1lcmljYXN8ZW58MHx8MHx8fDA%3D",
+    },
+    {
+      name: "Oceania",
+      image:
+        "https://images.unsplash.com/photo-1502786129293-79981df4e689?auto=format&fit=crop&w=800&q=80",
+    },
+  ];
+
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -132,12 +160,61 @@ function Countries() {
     }));
   };
 
+  const handleRegionSelect = (region) => {
+    setFilters((prev) => ({
+      ...prev,
+      region: prev.region === region ? "All" : region,
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 mt-20">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-semibold text-gray-900 mb-8">
           Explore Countries
         </h1>
+
+        {/* Region Image Buttons */}
+        <div className="mb-8">
+          <h2 className="text-lg font-medium text-gray-700 mb-4">
+            Filter by Region
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {regions.map((region) => (
+              <button
+                key={region.name}
+                onClick={() => handleRegionSelect(region.name)}
+                className={`relative h-32 rounded-lg overflow-hidden group transition-all duration-300 ${
+                  filters.region === region.name
+                    ? "ring-4 ring-purple-500"
+                    : "hover:ring-2 hover:ring-purple-300"
+                }`}
+              >
+                <img
+                  src={region.image}
+                  alt={region.name}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div
+                  className={`absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-all duration-300 ${
+                    filters.region === region.name
+                      ? "bg-opacity-60"
+                      : "group-hover:bg-opacity-50"
+                  }`}
+                >
+                  <span className="text-white font-bold text-lg drop-shadow-md">
+                    {region.name}
+                  </span>
+                </div>
+                {filters.region === region.name && (
+                  <div className="absolute top-2 right-2 bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    ✓
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Search and Filter Section */}
         <div className="flex flex-col gap-4 mb-8">
@@ -166,6 +243,24 @@ function Countries() {
                 {uniqueFilters.regions.map((region) => (
                   <option key={region} value={region}>
                     {region === "All" ? "All Regions" : region}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subregion Filter */}
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <select
+                className="w-full pl-10 pr-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none appearance-none bg-white"
+                value={filters.subregion}
+                onChange={(e) =>
+                  handleFilterChange("subregion", e.target.value)
+                }
+              >
+                {uniqueFilters.subregions.map((subregion) => (
+                  <option key={subregion} value={subregion}>
+                    {subregion === "All" ? "All Subregions" : subregion}
                   </option>
                 ))}
               </select>
