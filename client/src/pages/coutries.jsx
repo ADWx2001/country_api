@@ -55,17 +55,18 @@ function Countries() {
   ];
 
   useEffect(() => {
-    const fetchCountries = async () => {
+    const fetchAllCountries = async () => {
       try {
         setLoading(true);
         const response = await fetch("https://restcountries.com/v3.1/all");
         const data = await response.json();
-
         const sortedCountries = data.sort((a, b) =>
           a.name.common.localeCompare(b.name.common)
         );
+        setCountries(sortedCountries);
+        setFilteredCountries(sortedCountries);
 
-        // Extract unique filter values
+        // Extract unique filter values from the initial data
         const regions = [...new Set(data.map((c) => c.region))].filter(Boolean);
         const subregions = [...new Set(data.map((c) => c.subregion))].filter(
           Boolean
@@ -73,14 +74,11 @@ function Countries() {
         const capitals = [
           ...new Set(data.flatMap((c) => c.capital || [])),
         ].filter(Boolean);
-
-        // Extract languages and currencies (they're objects in the API response)
         const languages = [
           ...new Set(
             data.flatMap((c) => (c.languages ? Object.values(c.languages) : []))
           ),
         ].filter(Boolean);
-
         const currencies = [
           ...new Set(
             data.flatMap((c) => (c.currencies ? Object.keys(c.currencies) : []))
@@ -94,55 +92,79 @@ function Countries() {
           languages: ["All", ...languages],
           currencies: ["All", ...currencies],
         });
-
-        setCountries(sortedCountries);
-        setFilteredCountries(sortedCountries);
       } catch (error) {
-        console.error("Error fetching countries:", error);
+        console.error("Error fetching all countries:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCountries();
+    fetchAllCountries();
   }, []);
 
   useEffect(() => {
-    let results = countries;
+    const fetchFilteredData = async () => {
+      try {
+        setLoading(true);
+        let url;
 
-    // Apply search filter
+        // Determine which endpoint to call based on active filters
+        if (filters.region !== "All") {
+          url = `https://restcountries.com/v3.1/region/${filters.region}`;
+        } else if (filters.subregion !== "All") {
+          url = `https://restcountries.com/v3.1/subregion/${filters.subregion}`;
+        } else if (filters.capital !== "All") {
+          url = `https://restcountries.com/v3.1/capital/${filters.capital}`;
+        } else if (filters.language !== "All") {
+          url = `https://restcountries.com/v3.1/lang/${filters.language}`;
+        } else if (filters.currency !== "All") {
+          url = `https://restcountries.com/v3.1/currency/${filters.currency}`;
+        } else {
+          // No specific filters, use all countries
+          setFilteredCountries(countries);
+          setCurrentPage(1);
+          return;
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
+        const sortedCountries = Array.isArray(data)
+          ? data.sort((a, b) => a.name.common.localeCompare(b.name.common))
+          : [];
+
+        setFilteredCountries(sortedCountries);
+        setCurrentPage(1);
+      } catch (error) {
+        console.error("Error fetching filtered data:", error);
+        setFilteredCountries([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Only fetch if any filter is active (not "All")
+    if (Object.values(filters).some((filter) => filter !== "All")) {
+      fetchFilteredData();
+    } else {
+      // If all filters are "All", show all countries
+      setFilteredCountries(countries);
+      setCurrentPage(1);
+    }
+  }, [filters, countries]);
+
+  // Handle search separately since there's no search endpoint in the API
+  useEffect(() => {
     if (searchTerm) {
-      results = results.filter((country) =>
+      const results = filteredCountries.filter((country) =>
         country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      setFilteredCountries(results);
+      setCurrentPage(1);
+    } else if (Object.values(filters).every((filter) => filter === "All")) {
+      // If no search term and no filters, show all countries
+      setFilteredCountries(countries);
     }
-
-    // Apply all active filters
-    if (filters.region !== "All") {
-      results = results.filter((c) => c.region === filters.region);
-    }
-    if (filters.subregion !== "All") {
-      results = results.filter((c) => c.subregion === filters.subregion);
-    }
-    if (filters.capital !== "All") {
-      results = results.filter((c) => c.capital?.includes(filters.capital));
-    }
-    if (filters.language !== "All") {
-      results = results.filter(
-        (c) =>
-          c.languages && Object.values(c.languages).includes(filters.language)
-      );
-    }
-    if (filters.currency !== "All") {
-      results = results.filter(
-        (c) =>
-          c.currencies && Object.keys(c.currencies).includes(filters.currency)
-      );
-    }
-
-    setFilteredCountries(results);
-    setCurrentPage(1); // Reset to first page when filters change
-  }, [searchTerm, filters, countries]);
+  }, [searchTerm, filters, countries, filteredCountries]);
 
   // Get current countries for pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -154,17 +176,19 @@ function Countries() {
   const totalPages = Math.ceil(filteredCountries.length / itemsPerPage);
 
   const handleFilterChange = (filterName, value) => {
-    setFilters((prev) => ({
-      ...prev,
+    // Reset other filters when setting a new one
+    setFilters({
+      region: "All",
+      subregion: "All",
+      capital: "All",
+      language: "All",
+      currency: "All",
       [filterName]: value,
-    }));
+    });
   };
 
   const handleRegionSelect = (region) => {
-    setFilters((prev) => ({
-      ...prev,
-      region: prev.region === region ? "All" : region,
-    }));
+    handleFilterChange("region", region === filters.region ? "All" : region);
   };
 
   return (
