@@ -80,7 +80,7 @@ export default function Header() {
           ) : (
             <div className="flex flex-col">
               <h1 className="text-white text-sm md:text-base font-semibold">
-                Chathu
+                World Travel
               </h1>
               <span className="text-[9px] md:text-[10px] text-white">
                 Explore Countries
