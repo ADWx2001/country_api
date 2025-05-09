@@ -62,9 +62,11 @@ export default function SignIn() {
       <div className="bg-white p-8 rounded-lg shadow-md w-[500px]">
         <div className="flex justify-center">
           <img
-            src="https://s.tmimgcdn.com/scr/800x500/347300/finance-business-graphic-logo-vector-template-v7_347341-original.jpg"
-            alt="Logo"
-            className="mb-4 w-36"
+            src={
+              "https://cliply.co/wp-content/uploads/2021/02/392102850_EARTH_EMOJI_400px.gif"
+            }
+            className="w-12 md:w-16"
+            alt="Finova Logo"
           />
         </div>
         <h2 className="text-2xl font-semibold text-center mb-1">
