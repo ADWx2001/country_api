@@ -66,7 +66,7 @@ function Countries() {
         setCountries(sortedCountries);
         setFilteredCountries(sortedCountries);
 
-        // Extract unique filter values from the initial data
+        //Extract unique filter values from the initial data
         const regions = [...new Set(data.map((c) => c.region))].filter(Boolean);
         const subregions = [...new Set(data.map((c) => c.subregion))].filter(
           Boolean
@@ -108,7 +108,7 @@ function Countries() {
         setLoading(true);
         let url;
 
-        // Determine which endpoint to call based on active filters
+        //endpoint to call based on active filters
         if (filters.region !== "All") {
           url = `https://restcountries.com/v3.1/region/${filters.region}`;
         } else if (filters.subregion !== "All") {
@@ -120,7 +120,7 @@ function Countries() {
         } else if (filters.currency !== "All") {
           url = `https://restcountries.com/v3.1/currency/${filters.currency}`;
         } else {
-          // No specific filters, use all countries
+          //use all countries
           setFilteredCountries(countries);
           setCurrentPage(1);
           return;
@@ -142,17 +142,17 @@ function Countries() {
       }
     };
 
-    // Only fetch if any filter is active (not "All")
+    // fetch if any filter is active (not "All")
     if (Object.values(filters).some((filter) => filter !== "All")) {
       fetchFilteredData();
     } else {
-      // If all filters are "All", show all countries
+      // all filters are "All", show all countries
       setFilteredCountries(countries);
       setCurrentPage(1);
     }
   }, [filters, countries]);
 
-  // Handle search separately since there's no search endpoint in the API
+  // handle search separately
   useEffect(() => {
     if (searchTerm) {
       const results = filteredCountries.filter((country) =>
@@ -161,7 +161,7 @@ function Countries() {
       setFilteredCountries(results);
       setCurrentPage(1);
     } else if (Object.values(filters).every((filter) => filter === "All")) {
-      // If no search term and no filters, show all countries
+      // If no search term and no filters show all
       setFilteredCountries(countries);
     }
   }, [searchTerm, filters, countries, filteredCountries]);
